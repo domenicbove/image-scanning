@@ -11,6 +11,12 @@ objects:
   metadata:
     name: ${NAME}
 - apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: rhel7
+  spec:
+    dockerImageRepository: registry.access.redhat.com/rhel7/rhel
+- apiVersion: v1
   kind: BuildConfig
   metadata:
     name: ${NAME}
@@ -21,7 +27,7 @@ objects:
         name: ${NAME}:latest
     source:
       dockerfile: |
-        FROM registry.access.redhat.com/rhel7/rhel:7.4
+        FROM registry.access.redhat.com/rhel7/rhel
         USER root
         RUN yum --enablerepo="rhel-7-server-extras-rpms" --enablerepo="rhel-7-server-optional-rpms" -y install libassuan-devel \
           ostree-devel runc skopeo-containers openscap-utils scap-security-guide
@@ -33,7 +39,10 @@ objects:
           rm buildah-0.4.1.x86_64.rpm
       type: Dockerfile
     strategy:
-      dockerStrategy: {}
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: rhel7:7.4
       type: Docker
     triggers:
     - type: ConfigChange
