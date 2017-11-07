@@ -12,7 +12,7 @@ To build image
 ```
 oc process -f bctemplate.yml | oc create -f -
 ```
-To run pod
+After build completes, to run pod
 ```
 oc process -f podtemplate.yml | oc create -f -
 ```
