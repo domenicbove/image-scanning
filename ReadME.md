@@ -11,6 +11,7 @@ oc adm policy add-scc-to-user privileged -z imagemanager
 To build image
 ```
 oc process -f bctemplate.yml | oc create -f -
+oc start-build image-scan-base --from-repo=.
 ```
 After build completes, to run pod
 ```
