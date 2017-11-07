@@ -5,12 +5,12 @@ Setup:
 ```
 oc new-project scanner
 oc create sa imagemanager
-oc adm policy add-scc-to-user anyuid system:serviceaccount:scanner:imagemanager
+oc adm policy add-scc-to-user anyuid -z imagemanager
+oc adm policy add-scc-to-user privileged -z imagemanager
 ```
 To build image
 ```
 oc process -f bctemplate.yml | oc create -f -
-oc start-build image-scan-base --follow
 ```
 To run pod
 ```

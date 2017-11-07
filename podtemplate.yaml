@@ -13,7 +13,7 @@ objects:
   spec:
     containers:
     - name: scan-image
-      image: docker-registry.default.svc:5000/cicd/image-scan-base:latest
+      image: docker-registry.default.svc:5000/scanner/image-scan-base:latest
       command:
         - "/bin/bash"
         - "-c"
