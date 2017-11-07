@@ -27,8 +27,7 @@ objects:
     restartPolicy: Never
     serviceAccount: ${SERVICE_ACCOUNT_NAME}
     volumes:
-    - hostPath:
-        path: /var/lib/containers/storage
+    - emptyDir: {}
       name: docker-mount
 parameters:
 - name: SERVICE_ACCOUNT_NAME

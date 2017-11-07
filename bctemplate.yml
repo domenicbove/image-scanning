@@ -32,7 +32,7 @@ objects:
         RUN yum --enablerepo="rhel-7-server-extras-rpms" --enablerepo="rhel-7-server-optional-rpms" -y install libassuan-devel \
           ostree-devel runc skopeo-containers openscap-utils scap-security-guide
         RUN ls /etc/containers/
-        RUN echo 'override_kernel_check = "true"' > /etc/containers/storage.conf
+        RUN echo 'override_kernel_check = "true"' >> /etc/containers/storage.conf`
         RUN cat /etc/containers/storage.conf
         RUN curl -o buildah-0.4.1.x86_64.rpm https://kojipkgs.fedoraproject.org//packages/buildah/0.4/1.git9cbccf8.fc27/x86_64/buildah-0.4-1.git9cbccf8.fc27.x86_64.rpm && \
           rpm -ivh buildah-0.4.1.x86_64.rpm && yum -y install buildah && \
