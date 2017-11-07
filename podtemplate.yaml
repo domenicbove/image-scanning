@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: scan-image-template
+  annotations:
+    openshift.io/display-name: Scan Image
+    description: Template to create a Job to Scan an Image
+objects:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: "scan-image-${UNIQUE_VALUE}"
+  spec:
+    containers:
+    - name: scan-image
+      image: docker-registry.default.svc:5000/cicd/image-scan-base:latest
+      command:
+        - "/bin/bash"
+        - "-c"
+        - >
+          buildah from registry.access.redhat.com/rhel7.4
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - mountPath: /var/lib/containers/
+          name: docker-mount
+    restartPolicy: Never
+    serviceAccount: ${SERVICE_ACCOUNT_NAME}
+    volumes:
+    - hostPath:
+        path: /var/lib/containers/
+      name: docker-mount
+parameters:
+- name: SERVICE_ACCOUNT_NAME
+  displayName: Service Account Name
+  description: Name of the service account to Run the Job As
+  value: imagemanager
+  required: true
+- name: IMAGE_TO_SCAN
+  displayName: Image to Scan
+  description: Image to Scan
+  required: true
+  value: registry.access.redhat.com/rhel7.4
+- name: UNIQUE_VALUE
+  generate: expression
+  from: "[a-z0-9]{5}"
+  required: true

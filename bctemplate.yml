@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: scan-image-template
+  annotations:
+    openshift.io/display-name: Image Scanning Base
+    description: Template to create a base image for scanning images
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: ${NAME}
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: ${NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${NAME}:latest
+    source:
+      dockerfile: |
+        FROM registry.access.redhat.com/rhel7/rhel:7.4
+        USER root
+        RUN yum --enablerepo="rhel-7-server-extras-rpms" --enablerepo="rhel-7-server-optional-rpms" -y install libassuan-devel \
+          ostree-devel runc skopeo-containers openscap-utils scap-security-guide
+        RUN ls /etc/containers/
+        RUN echo 'override_kernel_check = "true"' > /etc/containers/storage.conf
+        RUN cat /etc/containers/storage.conf
+        RUN curl -o buildah-0.4.1.x86_64.rpm https://kojipkgs.fedoraproject.org//packages/buildah/0.4/1.git9cbccf8.fc27/x86_64/buildah-0.4-1.git9cbccf8.fc27.x86_64.rpm && \
+          rpm -ivh buildah-0.4.1.x86_64.rpm && yum -y install buildah && \
+          rm buildah-0.4.1.x86_64.rpm
+      type: Dockerfile
+    strategy:
+      dockerStrategy: {}
+      type: Docker
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+parameters:
+- name: NAME
+  displayName: Name
+  description: Name Applied to the Resulting ImageStream and BuildConfig
+  value: image-scan-base
+  required: true
+- name: VERSION
+  displayName: OpenShift Container Platform Version
+  description: Version of the OpenShift Container Platform
+  value: "3.6"
+  required: true
