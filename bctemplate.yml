@@ -45,8 +45,3 @@ parameters:
   description: Name Applied to the Resulting ImageStream and BuildConfig
   value: image-scan-base
   required: true
-- name: VERSION
-  displayName: OpenShift Container Platform Version
-  description: Version of the OpenShift Container Platform
-  value: "3.6"
-  required: true

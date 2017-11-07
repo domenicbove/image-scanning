@@ -22,13 +22,13 @@ objects:
       securityContext:
         privileged: true
       volumeMounts:
-        - mountPath: /var/lib/containers/
+        - mountPath: /var/lib/containers/storage
           name: docker-mount
     restartPolicy: Never
     serviceAccount: ${SERVICE_ACCOUNT_NAME}
     volumes:
     - hostPath:
-        path: /var/lib/containers/
+        path: /var/lib/containers/storage
       name: docker-mount
 parameters:
 - name: SERVICE_ACCOUNT_NAME
