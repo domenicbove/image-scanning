@@ -14,5 +14,5 @@ oc start-build image-scan-base --follow
 ```
 To run pod
 ```
-oc process -f podtemplat.yml | oc create -f -
+oc process -f podtemplate.yml | oc create -f -
 ```
